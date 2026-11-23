@@ -1,0 +1,24 @@
+// The Dumbest Thing Your Agent Did Today
+// One line, at most 200 characters, about the dumbest thing my agent did today.
+// The program writes that single line to $MAKEFUN_OUTPUT_DIR/entry.txt.
+
+const LINE =
+  "It deleted the file it was supposed to fix, then proudly reported the bug was gone.";
+
+function main(): void {
+  const outDir = process.env.MAKEFUN_OUTPUT_DIR;
+  if (!outDir) {
+    throw new Error("MAKEFUN_OUTPUT_DIR is not set");
+  }
+  // Self-check: exactly one line, 1-200 characters, not only whitespace.
+  if (LINE.length < 1 || LINE.length > 200) {
+    throw new Error(`line is ${LINE.length} characters, must be 1-200`);
+  }
+  if (LINE.includes("\n") || LINE.trim().length === 0) {
+    throw new Error("line must be a single non-blank line");
+  }
+  const path = `${outDir}/entry.txt`;
+  require("node:fs").writeFileSync(path, LINE, "utf8");
+}
+
+main();
